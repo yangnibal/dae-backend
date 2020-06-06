@@ -19,15 +19,20 @@ from rest_framework import routers
 from account.views import UserViewSet
 from tests.views import TestViewSet
 from students.views import StudentViewSet
-from groups.views import GroupViewSet
+from groups.views import GroupViewSet, InfGroupViewSet
 from score.views import ScoreViewSet
+from materials.views import MaterialViewSet
+from videos.views import VideoViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'tests', TestViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'groups', GroupViewSet)
+router.register(r'infgroups', InfGroupViewSet)
 router.register(r'scores', ScoreViewSet)
+router.register(r'materials', MaterialViewSet)
+router.register(r'videos', VideoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

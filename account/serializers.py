@@ -5,9 +5,11 @@ from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
+    can_access_1 = serializers.BooleanField(read_only=True)
+    can_access_2 = serializers.BooleanField(read_only=True)
     class Meta:
         model = User
-        fields = ['username', 'name', 'is_staff', 'password', 'phone_number', 'email', 'id']
+        fields = ['username', 'name', 'is_staff', 'password', 'phone_number', 'email', 'can_access_1', 'can_access_2', 'id']
 
     def create(self, validated_data):
         user = User.objects.create(**validated_data)

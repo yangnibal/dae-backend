@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'tests',
     'students',
     'groups',
-    'score'
+    'score',
+    'videos',
+    'materials'
 ]
 
 MIDDLEWARE = [

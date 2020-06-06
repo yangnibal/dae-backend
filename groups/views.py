@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Group
+from .models import Group, InfGroup
 from students.models import Student
-from .serializers import GroupSerializer
+from .serializers import GroupSerializer, InfGroupSerializer
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -29,3 +29,14 @@ class GroupViewSet(viewsets.ModelViewSet):
         group = Group.objects.get(owner=request.user, student=student)
         serializer = GroupSerializer(group)
         return Response(serializer.data)
+
+class InfGroupViewSet(viewsets.ModelViewSet):
+    queryset = InfGroup.objects.all()
+    serializer_class = InfGroupSerializer
+
+    def create(self, request):
+        serializer = InfGroupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
