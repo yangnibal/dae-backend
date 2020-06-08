@@ -27,3 +27,17 @@ class VideoViewSet(viewsets.ModelViewSet):
             serializer.save(group=infgroup)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def findvid(self, request):
+        vid = Video.objects.all()
+        if request.data['grade'] is not "":
+            vid = vid.filter(grade=request.data['grade'])
+        if request.data['subject'] is not "":
+            vid = vid.filter(subject=request.data['subject'])
+        if request.data['group'] is not "":
+            group = InfGroup.objects.get(name=request.data['group'])
+            vid = vid.filter(group=group)
+
+        serializer = VideoSerializer(vid, many=True)
+        return Response(serializer.data)

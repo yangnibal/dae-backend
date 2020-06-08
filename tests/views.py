@@ -54,3 +54,10 @@ class TestViewSet(viewsets.ModelViewSet):
 
         serializer = TestSerializer(test, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, list=False, methods=['POST'])
+    def deletestd(self, request, pk):
+        test = self.get_object()
+        student = Student.objects.get(name=request.data['std_name'])
+        test.student.remove(student)
+        return Response(status=status.HTTP_204_NO_CONTENT)

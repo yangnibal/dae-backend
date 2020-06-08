@@ -13,8 +13,9 @@ class MaterialViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = MaterialSerializer(data=request.data)
         infgroup = InfGroup.objects.get(name=request.data['group'])
+
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(group=infgroup)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -26,3 +27,17 @@ class MaterialViewSet(viewsets.ModelViewSet):
             serializer.save(group=infgroup)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def findmat(self, request):
+        mat = Material.objects.all()
+        if request.data['grade'] is not "":
+            mat = mat.filter(grade=request.data['grade'])
+        if request.data['subject'] is not "":
+            mat = mat.filter(subject=request.data['subject'])
+        if request.data['group'] is not "":
+            group = InfGroup.objects.get(name=request.data['group'])
+            mat = mat.filter(group=group)
+
+        serializer = MaterialSerializer(mat, many=True)
+        return Response(serializer.data)
