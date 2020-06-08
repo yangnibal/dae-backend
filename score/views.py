@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .models import Score
+from .models import Score, Logo
 from tests.models import Test
 from tests.serializers import TestSerializer
 from students.models import Student
-from .serializers import ScoreSerializer
+from .serializers import ScoreSerializer, LogoSerializer
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -86,3 +86,14 @@ class ScoreViewSet(viewsets.ModelViewSet):
         score = Score.objects.filter(owner=request.user, test=test)
         serializer = ScoreSerializer(score, many=True)
         return Response(serializer.data)
+
+class LogoViewSet(viewsets.ModelViewSet):
+    queryset = Logo.objects.all()
+    serializer_class = LogoSerializer
+
+    def create(self, request):
+        serializer = LogoSerializer(request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

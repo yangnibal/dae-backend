@@ -20,9 +20,11 @@ from account.views import UserViewSet
 from tests.views import TestViewSet
 from students.views import StudentViewSet
 from groups.views import GroupViewSet, InfGroupViewSet
-from score.views import ScoreViewSet
+from score.views import ScoreViewSet, LogoViewSet
 from materials.views import MaterialViewSet
 from videos.views import VideoViewSet
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -33,6 +35,7 @@ router.register(r'infgroups', InfGroupViewSet)
 router.register(r'scores', ScoreViewSet)
 router.register(r'materials', MaterialViewSet)
 router.register(r'videos', VideoViewSet)
+router.register(r'logos', LogoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
