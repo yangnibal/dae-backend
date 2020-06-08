@@ -14,3 +14,7 @@ class Score(models.Model):
     prob_dens = models.CharField(max_length=10)
     z = models.CharField(max_length=10)
     id = models.AutoField(primary_key=True)
+
+class Logo(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    logo = models.ImageField(default=None, null=False)

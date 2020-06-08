@@ -29,7 +29,7 @@ class ScoreViewSet(viewsets.ModelViewSet):
         #import pdb; pdb.set_trace()
         for i in range(len(data)):
             serializer = ScoreSerializer(data=data[i])
-            student = Student.objects.get(name=data[i]['student'])
+            student = Student.objects.get(name=data[i]['student'], owner=request.user)
             percent = getPercent(data[i]['score'], test.average, test.std_dev)
             percent = round(percent, 1)
             rank = getRank(percent, test.cand_num)

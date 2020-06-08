@@ -1,4 +1,4 @@
-from .models import Score
+from .models import Score, Logo
 from rest_framework import serializers
 
 class ScoreSerializer(serializers.ModelSerializer):
@@ -14,3 +14,10 @@ class ScoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Score
         fields = ['score', 'percent', 'rank', 'rating', 'test', 'student', 'owner', 'z', 'prob_dens', 'id']
+
+class LogoSerializer(serializers.ModelSerializer):
+    logo = serializers.ImageField(use_url=True)
+    owner = serializers.CharField(source='owner.username', read_only=True)
+    class Meta:
+        model = Logo
+        fields = ['owner', 'logo']
