@@ -55,6 +55,16 @@ class UserViewSet(viewsets.ModelViewSet):
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
 
+    @action(detail=False, list=True, methods=['POST'])
+    def loginsuperuser(self, request):
+        serializer = AuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        if user.is_superuser:
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key})
+        return Response("not superuser")
+
     @action(detail=False, list=True, methods=['GET'])
     def logout(self, request):
         if not request.user.is_authenticated:

@@ -118,7 +118,7 @@ class LogoViewSet(viewsets.ModelViewSet):
                 serializer.save(owner=request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Logo.DoesNotExist
+        except Logo.DoesNotExist:
             serializer = LogoSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(owner=request.user)
@@ -131,5 +131,5 @@ class LogoViewSet(viewsets.ModelViewSet):
             logo = Logo.objects.get(owner=request.user)
             serializer = LogoSerializer(logo)
             return Response(serializer)
-        except: Logo.DoesNotExist:
+        except Logo.DoesNotExist:
             return Response("no logo exist")
