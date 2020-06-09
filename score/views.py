@@ -22,6 +22,24 @@ class ScoreViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, pk, partial=True):
+        instance = self.get_object()
+        serializer = ScoreSerializer(instance, data=request.data)
+        test = Test.objects.get(id=request.data['test'])
+        student = Student.objects.get(name=request.data['student'], owner=request.user)
+        percent = getPercent(request.data['score'], test.average, test.std_dev)
+        percent = round(percent, 1)
+        rank = getRank(percent, test.cand_num)
+        rank = int(round(rank, 0))
+        if(rank==0): rank=1
+        rating = getRating(percent)
+        z = getZ(request.data['score'], test.average, test.std_dev)
+        prob_dens = getProbDens(z)
+        if serializer.is_valid():
+            serializer.save(percent=percent, rank=rank, rating=rating, test=test, student=student, z=z, prob_dens=prob_dens, owner=request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
     @action(detail=False, list=True, methods=['POST'])
     def getlist(self, request):
         data = request.data['data']
@@ -92,8 +110,26 @@ class LogoViewSet(viewsets.ModelViewSet):
     serializer_class = LogoSerializer
 
     def create(self, request):
-        serializer = LogoSerializer(request.data)
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            logo = Logo.objects.get(owner=request.user)
+            logo.delete()
+            serializer = LogoSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(owner=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Logo.DoesNotExist
+            serializer = LogoSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(owner=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def getmylogo(self, request):
+        try:
+            logo = Logo.objects.get(owner=request.user)
+            serializer = LogoSerializer(logo)
+            return Response(serializer)
+        except: Logo.DoesNotExist:
+            return Response("no logo exist")

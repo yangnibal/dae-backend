@@ -15,6 +15,12 @@ class ScoreSerializer(serializers.ModelSerializer):
         model = Score
         fields = ['score', 'percent', 'rank', 'rating', 'test', 'student', 'owner', 'z', 'prob_dens', 'id']
 
+    def update(self, instance, validate_data):
+        instance.score = validate_data.get("score", instance.score)
+
+        instance.save()
+        return instance
+
 class LogoSerializer(serializers.ModelSerializer):
     logo = serializers.ImageField(use_url=True)
     owner = serializers.CharField(source='owner.username', read_only=True)
