@@ -41,6 +41,13 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request):
+        user = User.objects.all()
+        if request.user.is_superuser:
+            serializer = UserSerializer(user, many=True)
+            return Response(serializer.data)
+        return Response("no superuser")
+
     @action(detail=False, list=True, methods=['GET'])
     def me(self, request):
         user = request.user
@@ -112,3 +119,18 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response("email sended")
         except User.DoesNotExist:
             return Response("incorrect info")
+
+    @action(detail=False, list=True, methods=['POST'])
+    def deleteuser(self, request):
+        user = User.objects.get(username=request.data['username'])
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def getuserinfo(self, request):
+        try:
+            user = User.objects.get(username=request.data['username'])
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response("no user exist")

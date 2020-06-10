@@ -26,8 +26,7 @@ class StudentViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save(owner=request.user, group=group)
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)            
 
     @action(detail=False, list=True, methods=['GET'])
     def getmystd(self, request):

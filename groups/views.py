@@ -5,6 +5,7 @@ from .serializers import GroupSerializer, InfGroupSerializer
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from account.models import User
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
@@ -28,6 +29,13 @@ class GroupViewSet(viewsets.ModelViewSet):
         student = Student.objects.get(owner=request.user, name=request.data['name'])
         group = Group.objects.get(owner=request.user, student=student)
         serializer = GroupSerializer(group)
+        return Response(serializer.data)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def getusergroup(self, request):
+        user = User.objects.get(username=request.data['username'])
+        group = Group.objects.filter(owner=user)
+        serializer = GroupSerializer(group, many=True)
         return Response(serializer.data)
 
 class InfGroupViewSet(viewsets.ModelViewSet):
