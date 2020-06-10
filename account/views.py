@@ -144,3 +144,14 @@ class UserViewSet(viewsets.ModelViewSet):
             user = user.filter(username=request.data['username'])
         serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def caniuse(self, request):
+        if request.data['type'] == 1:
+            if request.user.can_access_1 == True:
+                return Response("canuseit")
+            return Response("cantuseit")
+        elif request.data['type'] == 2:
+            if request.user.can_access_2 == True:
+                return Response("canuseit")
+            return Response("cantuseit")
