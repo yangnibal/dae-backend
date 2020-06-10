@@ -134,3 +134,13 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         except User.DoesNotExist:
             return Response("no user exist")
+
+    @action(detail=False, list=True, methods=['POST'])
+    def finduser(self, request):
+        user = User.objects.all()
+        if request.data['name'] is not "":
+            user = user.filter(name=request.data['name'])
+        if request.data['username'] is not "":
+            user = user.filter(username=request.data['username'])
+        serializer = UserSerializer(user, many=True)
+        return Response(serializer.data)
