@@ -33,7 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk, partial=True):
         instance = self.get_object()
-        serializer = UserSerializer(instance ,data=request.data)
+        serializer = UserSerializer(instance ,data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
