@@ -125,7 +125,7 @@ class LogoViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, list=True, methods=['POST'])
+    @action(detail=False, list=True, methods=['GET'])
     def getmylogo(self, request):
         try:
             logo = Logo.objects.get(owner=request.user)
