@@ -130,6 +130,6 @@ class LogoViewSet(viewsets.ModelViewSet):
         try:
             logo = Logo.objects.get(owner=request.user)
             serializer = LogoSerializer(logo)
-            return Response(serializer)
+            return Response(serializer.data)
         except Logo.DoesNotExist:
             return Response("no logo exist")
