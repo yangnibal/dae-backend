@@ -11,3 +11,9 @@ class InfGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = InfGroup
         fields = ['name']
+
+    def update(self, instance, validate_data):
+        instance.name = validate_data.get("name", instance.name)
+
+        instance.save()
+        return instance
