@@ -7,6 +7,6 @@ class Video(models.Model):
     iframe = models.TextField()
     subject = models.CharField(max_length=10)
     grade = models.CharField(max_length=5)
-    group = models.ForeignKey(InfGroup, on_delete=models.CASCADE)
+    group = models.ForeignKey(InfGroup, null=True, on_delete=models.SET_NULL)
     id = models.AutoField(primary_key=True)
     

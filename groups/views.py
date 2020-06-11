@@ -49,9 +49,9 @@ class InfGroupViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self, request, pk=None, partial=True):
-        group = InfGroup.objects.get(name=request.data['name'])
-        serializer = InfGroupSerializer(group, data=request.data['newname'], partial=True)
+    def update(self, request, pk, partial=True):
+        instance = self.get_object()
+        serializer = InfGroupSerializer(instance, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

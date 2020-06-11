@@ -3,14 +3,16 @@ from .models import InfGroup, Group
 
 class GroupSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
+    id = serializers.CharField(read_only=True)
     class Meta:
         model = Group
-        fields = ['name', 'owner']
+        fields = ['name', 'owner', 'id']
 
 class InfGroupSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
     class Meta:
         model = InfGroup
-        fields = ['name']
+        fields = ['name', 'id']
 
     def update(self, instance, validate_data):
         instance.name = validate_data.get("name", instance.name)
