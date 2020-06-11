@@ -65,6 +65,6 @@ class InfGroupViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, list=True, methods=['POST'])
     def findgroup(self, request):
-        group = InfGroup.objects.filter(name=request.data['name'])
-        serializer = InfGroupSerializer(group)
+        group = InfGroup.objects.filter(name__contains=request.data['name'])
+        serializer = InfGroupSerializer(group, many=True)
         return Response(serializer.data)
