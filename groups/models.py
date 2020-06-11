@@ -6,5 +6,6 @@ class Group(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class InfGroup(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     
