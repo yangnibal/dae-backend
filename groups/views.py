@@ -48,3 +48,23 @@ class InfGroupViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None, partial=True):
+        group = InfGroup.objects.get(name=request.data['name'])
+        serializer = InfGroupSerializer(group, data=request.data['newname'], partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def delete(self, request):
+        group = InfGroup.objects.get(name=request.data['name'])
+        group.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def findgroup(self, request):
+        group = InfGroup.objects.get(name=request.data['name'])
+        serializer = GroupSerializer(group)
+        return Response(serializer.data)
