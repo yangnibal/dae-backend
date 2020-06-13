@@ -12,6 +12,7 @@ class StudentSerializer(serializers.ModelSerializer):
     def update(self, instance, validate_data):
         instance.name = validate_data.get("name", instance.name)
         instance.grade = validate_data.get("grade", instance.grade)
+        instance.group = validate_data.get("group", instance.group)
 
         instance.save()
         return instance
