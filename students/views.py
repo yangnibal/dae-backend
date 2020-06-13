@@ -43,7 +43,7 @@ class StudentViewSet(viewsets.ModelViewSet):
         if request.data['grade'] is not "":
             student = student.filter(grade=request.data['grade'])
         if request.data['name'] is not "":
-            student = student.filter(name=request.data['name'])
+            student = student.filter(name__contains=request.data['name'])
         #import pdb; pdb.set_trace()
         
         serializer = StudentSerializer(student, many=True)

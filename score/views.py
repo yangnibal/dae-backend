@@ -84,8 +84,8 @@ class ScoreViewSet(viewsets.ModelViewSet):
     @action(detail=False, list=True, methods=['POST'])
     def findscore(self, request):
         #import pdb;pdb.set_trace()
-        student = Student.objects.get(id=request.data['id'])
-        test = Test.objects.filter(student=student)
+        student = Student.objects.get(id=request.data['id'], owner=request.user)
+        test = Test.objects.filter(student=student, owner=request.user)
         if request.data['grade'] is not "":
             test = test.filter(grade=request.data['grade'])
         if request.data['test_type'] is not "":
