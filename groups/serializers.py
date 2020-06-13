@@ -8,6 +8,13 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['name', 'owner', 'id']
 
+    def update(self, instance, validate_data):
+        instance.name = validate_data.get("name", instance.name)
+
+        instance.save()
+        return instance
+
+
 class InfGroupSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
     class Meta:

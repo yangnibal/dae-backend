@@ -18,6 +18,14 @@ class GroupViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, pk, partial=True):
+        instance = self.get_object()
+        serializer = InfGroupSerializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=False, list=True, methods=['GET'])
     def getmygroup(self, request):
         group = Group.objects.filter(owner=request.user)
@@ -35,6 +43,12 @@ class GroupViewSet(viewsets.ModelViewSet):
     def getusergroup(self, request):
         user = User.objects.get(username=request.data['username'])
         group = Group.objects.filter(owner=user)
+        serializer = GroupSerializer(group, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def findmygroup(self, request):
+        group = Group.objects.filter(name__contains=request.data['name'])
         serializer = GroupSerializer(group, many=True)
         return Response(serializer.data)
 

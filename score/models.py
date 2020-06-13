@@ -6,7 +6,7 @@ from account.models import User
 class Score(models.Model):
     score = models.CharField(max_length=10)
     percent = models.CharField(max_length=7)
-    rank = models.CharField(max_length=5)
+    rank = models.CharField(max_length=20)
     rating = models.CharField(max_length=2)
     test = models.ForeignKey(Test, on_delete=models.CASCADE, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
