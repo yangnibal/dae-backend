@@ -13,6 +13,7 @@ class MaterialSerializer(serializers.ModelSerializer):
         instance.link = validate_data.get("link", instance.link)
         instance.subject = validate_data.get("subject", instance.subject)
         instance.grade = validate_data.get("grade", instance.grade)
+        instance.group = validate_data.get("group", instance.group)
 
         instance.save()
         return instance

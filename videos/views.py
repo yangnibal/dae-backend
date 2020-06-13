@@ -22,9 +22,9 @@ class VideoViewSet(viewsets.ModelViewSet):
     def update(self, request, pk, partial=True):
         instance = self.get_object()
         serializer = VideoSerializer(instance, data=request.data)
-        infgroup = InfGroup.objects.get(name=request.data['group'])
+        group = InfGroup.objects.get(name=request.data['group'])
         if serializer.is_valid():
-            serializer.save(group=infgroup)
+            serializer.save(group=group)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
