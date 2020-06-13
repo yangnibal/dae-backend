@@ -17,6 +17,11 @@ class ScoreSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validate_data):
         instance.score = validate_data.get("score", instance.score)
+        instance.percent = validate_data.get("percent", instance.percent)
+        instance.rank = validate_data.get("rank", instance.rank)
+        instance.rating = validate_data.get("rating", instance.rating)
+        instance.z = validate_data.get("z", instance.z)
+        instance.prob_dens = validate_data.get("prob_dens", instance.prob_dens)
 
         instance.save()
         return instance
