@@ -105,15 +105,6 @@ class ScoreViewSet(viewsets.ModelViewSet):
         serializer = ScoreSerializer(score, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, list=True, methods=['POST'])
-    def deletescore(self, request):
-        score = Score.objects.get(id=request.data['id'])
-        import pdb;pdb.set_trace()
-        test = score.test
-        test.student.remove(score.student)
-        score.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 class LogoViewSet(viewsets.ModelViewSet):
     queryset = Logo.objects.all()
     serializer_class = LogoSerializer

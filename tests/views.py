@@ -57,7 +57,7 @@ class TestViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, list=False, methods=['POST'])
     def deletestd(self, request, pk):
-        test = self.get_object()
+        test = self.get_object(pk)
         student = Student.objects.get(name=request.data['std_name'])
         test.student.remove(student)
         return Response(status=status.HTTP_204_NO_CONTENT)
