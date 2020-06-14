@@ -13,7 +13,7 @@ class ScoreViewSet(viewsets.ModelViewSet):
     queryset = Score.objects.all()
     serializer_class = ScoreSerializer
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         serializer = ScoreSerializer(data=request.data['data'], many=True)
         #import pdb;pdb.set_trace()
         #test = Test.objects.get(id=request.data['data'][0]['test_id'])
@@ -39,6 +39,13 @@ class ScoreViewSet(viewsets.ModelViewSet):
             serializer.save(percent=percent, rank=rank, rating=rating, test=test, student=student, z=z, prob_dens=prob_dens, owner=request.user)
             return Response(serializer.data)
         return Response(serializer.errors)
+
+    def delete(self, request, pk):
+        score = self.get_object()
+        test = score.test
+        test.student.remove(score.student)
+        score.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, list=True, methods=['POST'])
     def getlist(self, request):
