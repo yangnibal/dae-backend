@@ -40,13 +40,6 @@ class ScoreViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors)
 
-    def delete(self, request, pk):
-        score = self.get_object()
-        test = score.test
-        test.student.remove(score.student)
-        score.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
     @action(detail=False, list=True, methods=['POST'])
     def getlist(self, request):
         data = request.data['data']
@@ -111,6 +104,15 @@ class ScoreViewSet(viewsets.ModelViewSet):
         score = Score.objects.filter(owner=request.user, test=test)
         serializer = ScoreSerializer(score, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, list=True, methods=['POST'])
+    def deletescore(self, request):
+        score = Score.objects.get(id=request.data['id'])
+        import pdb;pdb.set_trace()
+        test = score.test
+        test.student.remove(score.student)
+        score.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class LogoViewSet(viewsets.ModelViewSet):
     queryset = Logo.objects.all()
