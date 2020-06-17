@@ -155,3 +155,9 @@ class UserViewSet(viewsets.ModelViewSet):
             if request.user.can_access_2 == True:
                 return Response("canuseit")
             return Response("cantuseit")
+
+    @action(detail=False, list=True, methods=['GET'])
+    def issuperuser(self, request):
+        if request.user.is_superuser:
+            return Response("superuser")
+        return Response("not superuser")
